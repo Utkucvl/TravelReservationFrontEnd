@@ -4,10 +4,10 @@ import { CSSTransition } from "react-transition-group";
 import "./popup.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login, register } from "../../store/securitySlice";
+import {login, register } from "../../store/securitySlice";
 import alertify from "alertifyjs";
 
-const Popup = ({ orderPopup, setOrderPopup }) => {
+const Popup = ({ orderPopup, setOrderPopup ,handleIsAdminTrue}) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -55,8 +55,9 @@ const Popup = ({ orderPopup, setOrderPopup }) => {
       alertify.success("You have logged in");
 
       if (payload.role === "ADMIN") {
-        console.log(payload);
+        handleIsAdminTrue()
         navigate("/admin");
+        setOrderPopup(false)
       }
       if (payload.role === "USER") {
         setOrderPopup(false);
@@ -338,6 +339,7 @@ const Popup = ({ orderPopup, setOrderPopup }) => {
 Popup.propTypes = {
   orderPopup: PropTypes.bool.isRequired,
   setOrderPopup: PropTypes.func.isRequired,
+  handleIsAdminTrue:PropTypes.func.isRequired
 };
 
 export default Popup;

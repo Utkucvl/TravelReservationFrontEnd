@@ -37,6 +37,7 @@ export const updateTestimonial = createAsyncThunk(
   "/testimonial/updateTestimonial",
   async (data, thunkApi) => {
     try {
+      console.log(data);
       const response = await axios.put(`/testimonials/${data.id}`, data);
       return response.data;
     } catch (error) {
@@ -94,9 +95,7 @@ export const testimonialSlice = createSlice({
       state.err = { message: "Error on Saving" };
     });
     builder.addCase(updateTestimonial.fulfilled, (state, action) => {
-      const index = state.testimonials.findIndex(
-        (n) => n.id === action.payload.id
-      );
+      const index = state.testimonials.findIndex((n) => n.id === action.payload.id);
       if (index !== -1) {
         state.testimonials[index] = action.payload;
       }

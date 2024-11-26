@@ -5,6 +5,7 @@ import blogSlice from "./blogSlice";
 import toVisitSlice from "./toVisitSlice";
 import hotelSlice from "./hotelSlice";
 import reservationSlice from "./reservationSlice";
+import userSlice  from "./userSlice";
 export const store = configureStore({
     reducer: {
       security: securitySlice,
@@ -12,6 +13,7 @@ export const store = configureStore({
       blog:blogSlice,
       toVisit :toVisitSlice,
       hotel:hotelSlice,
-      reservation:reservationSlice
+      reservation:reservationSlice,
+      user:userSlice
     },
   });

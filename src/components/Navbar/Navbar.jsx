@@ -155,9 +155,9 @@ const Navbar = ({ handleOrderPopup }) => {
               {/*Dropdown section */}
               <li className="py-4 relative group cursor-pointer">
                 <div className="dropdown flex items-center">
-                  <span>Quick Links</span>
+                  <span className="active">Quick Links</span>
                   <span>
-                    <FaCaretDown className="transition-all duration-200 group-hover:rotate-180" />
+                    <FaCaretDown className="transition-all duration-200 group-hover:rotate-180 active" />
                   </span>
                 </div>
                 <div className="absolute -left-9 top-[57px] z-[9999] hidden group-hover:block shadow-md text-black w-[150px] bg-white p-2">
@@ -219,7 +219,7 @@ const Navbar = ({ handleOrderPopup }) => {
 };
 
 Navbar.propTypes = {
-  handleOrderPopup: PropTypes.func.isRequired, // setOrderPopup should be a function
+  handleOrderPopup: PropTypes.func.isRequired
 };
 
 export default Navbar;

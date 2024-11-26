@@ -4,6 +4,8 @@ import axios from "../api/api";
 const initialState = {
   reservations: [], // Ensure this is an array
   reservation: {},
+  reservationStats:[],
+  chartStats:[],
   loading: true,
   err: {},
 };
@@ -38,9 +40,10 @@ export const saveReservation = createAsyncThunk(
 // Update a reservation
 export const updateReservation = createAsyncThunk(
   "reservation/updateReservation",
-  async ({ id, data }, thunkApi) => {
+  async (data , thunkApi) => {
     try {
-      const response = await axios.put(`/reservations/${id}`, data);
+      console.log(data)
+      const response = await axios.put(`/reservations/${data.id}`, data);
       return response.data;
     } catch (error) {
       return thunkApi.rejectWithValue(error.response?.data);
@@ -51,8 +54,9 @@ export const updateReservation = createAsyncThunk(
 // Delete a reservation
 export const deleteReservation = createAsyncThunk(
   "reservation/deleteReservation",
-  async (id, thunkApi) => {
+  async ({id}, thunkApi) => {
     try {
+      console.log(id)
       await axios.delete(`/reservations/${id}`);
       return { id }; // Return the ID for filtering in the state
     } catch (error) {
@@ -77,10 +81,10 @@ export const getReservationsByHotelId = createAsyncThunk(
 // Get future reservations by user ID
 export const getFutureReservationsByUserId = createAsyncThunk(
   "reservation/getFutureReservationsByUserId",
-  async (data, thunkApi) => {
+  async (id, thunkApi) => {
     try {
       const response = await axios.get(
-        "/reservations/future?userId=" + data
+        "/reservations/future?userId=" + id
       );
       return response.data;
     } catch (error) {
@@ -88,6 +92,31 @@ export const getFutureReservationsByUserId = createAsyncThunk(
     }
   }
 );
+export const getReservationsStats = createAsyncThunk(
+  "reservation/getReservationsStats",
+  async (_, thunkApi) => {
+    try {
+      const response = await axios.get("/reservations/dashboardstats");
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
+export const getChartStats = createAsyncThunk(
+  "reservation/getChartStats",
+  async (_, thunkApi) => {
+    try {
+      const response = await axios.get("/reservations/chartstats");
+      console.log(response.data)
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
+
+
 
 export const reservationSlice = createSlice({
   name: "reservation",
@@ -172,6 +201,30 @@ export const reservationSlice = createSlice({
     builder.addCase(deleteReservation.rejected, (state) => {
       state.loading = false;
       state.err = { message: "Error on deleting reservation." };
+    });
+    builder.addCase(getReservationsStats.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getReservationsStats.fulfilled, (state, action) => {
+      state.reservationStats = action.payload;
+      state.loading = false;
+      state.err = "";
+    });
+    builder.addCase(getReservationsStats.rejected, (state) => {
+      state.loading = false;
+      state.err = { message: "Problem on getting reservations." };
+    });
+    builder.addCase(getChartStats.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getChartStats.fulfilled, (state, action) => {
+      state.chartStats = action.payload;
+      state.loading = false;
+      state.err = "";
+    });
+    builder.addCase(getChartStats.rejected, (state) => {
+      state.loading = false;
+      state.err = { message: "Problem on getting reservations." };
     });
   },
 });

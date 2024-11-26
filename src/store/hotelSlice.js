@@ -20,6 +20,19 @@ export const getHotels = createAsyncThunk(
     }
   }
 );
+export const getHotel = createAsyncThunk(
+  "/hotel/getHotel",
+  async (id, thunkApi) => {
+    try {
+      console.log(id)
+      const response = await axios.get("/hotels/"+id);
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue(error.response?.data);
+    }
+  }
+);
 export const getHotelsByFilter = createAsyncThunk(
     "/hotel/getHotelsByFilter",
     async (data, thunkApi) => {
@@ -78,6 +91,20 @@ export const hotelSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getHotel.pending, (state) => {
+      state.loading = true;
+    });
+
+    builder.addCase(getHotel.fulfilled, (state, action) => {
+      state.hotel = action.payload;
+      state.loading = false;
+      state.err = "";
+    });
+
+    builder.addCase(getHotel.rejected, (state) => {
+      state.loading = false;
+      state.err = "Problem on getting Data.";
+    });
     builder.addCase(getHotels.pending, (state) => {
       state.loading = true;
     });

@@ -35,6 +35,7 @@ const FilteredHotelCard = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
+    console.log(totalPrice)
     AOS.init({ duration: 1000 }); // Initialize AOS with duration
   }, []);
 
